@@ -1,6 +1,7 @@
 import  random
 import  string
 from faker import Faker
+from uuid import uuid4
 
 faker = Faker()
 
@@ -31,6 +32,17 @@ class DataGenerator:
 
         return ''.join(password)
 
-# data_test = DataGenerator()
-#
-# print(data_test.generate_random_password())
+    @staticmethod
+    def generate_random_movie():
+        random_movie = faker.catch_phrase(),
+        return str(random_movie)
+
+    @staticmethod
+    def generate_random_int():
+        random_int = random.randint(1, 10_000)
+        return random_int
+
+    @staticmethod
+    def generate_random_sentence():
+        random_sentence = faker.sentence(nb_words=6)
+        return  random_sentence
