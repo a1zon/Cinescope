@@ -18,7 +18,7 @@ BAD_EMAIL = ")*@gmail.cpm"
 MOVIES_ENDPOINT = "/movies"
 
 UPDATE_DATA = {
-            "name": "Updated Test Movie",
+
             "price": 999,
             "published": False
         }
