@@ -1,5 +1,5 @@
 import  requests
-from constants import *
+from constants import REGISTER_ENDPOINT, BASE_URL
 import pytest
 from utils.data_generator import DataGenerator
 from custom_requester.requestor import CustomRequester
@@ -7,6 +7,9 @@ from api.api_manager import ApiManager
 
 @pytest.fixture(scope = "function")
 def test_user():
+    """
+    Фикстура для создания тестового юзера
+    """
     random_email = DataGenerator.generate_random_email()
     random_name = DataGenerator.generate_random_name()
     random_password = DataGenerator.generate_random_password()
@@ -21,6 +24,9 @@ def test_user():
 
 @pytest.fixture(scope="function")
 def test_movie():
+    """
+    Фикстура для создания тестового фмльма
+    """
     random_movie = DataGenerator.generate_random_movie()
     random_price = DataGenerator.generate_random_int()
     random_description = DataGenerator.generate_random_sentence()
@@ -40,15 +46,14 @@ def registered_user(requester, test_user):
     """
     Фикстура для регистрации
     """
-    response = requester.send_request( # а вот эта строчка как вообще работает? - в фистуре ведь нету некакого метода send request - откуда питон его берет и почему мы можем вызывать его так ?
+    response = requester.send_request(
         method="POST",
         endpoint=REGISTER_ENDPOINT,
         data=test_user,
         expected_status=201
     )
     response_data = response.json()
-    registered_user = test_user.copy()
-    registered_user["id"] = response_data["id"]
+    registered_user = test_user.copy()# нужно потому что в ответе не содержится пароля - а он нужен для атворизации
     assert response_data["email"] == test_user["email"], "Email не совпадает"
     assert "id" in response_data, "ID пользователя отсутствует в ответе"
     assert "roles" in response_data, "Роли пользователя отсутствуют в ответе"
@@ -75,32 +80,37 @@ def session():
 @pytest.fixture(scope = "session")
 def api_manager(session):
     """
-     созданиt экземпляра ApiManager.
+     создание экземпляра ApiManager.
     """
     return ApiManager(session)
 
 @pytest.fixture(scope="function")
 def auth_user(api_manager,test_user):
+    """
+    Фикстура для авторизации обыным юзером
+    """
     api_manager.auth_api.authenticate(test_user)
-    return api_manager # или весь api_manager
+    return api_manager
 
 @pytest.fixture(scope = "session")
 def auth_admin(api_manager):
+    """
+    Фикстура для авторизации админом
+    """
     api_manager.auth_api.authenticate_admin()
     return api_manager
 
 
 @pytest.fixture(scope="function")
 def created_movie(auth_admin, test_movie):
+    """
+    Фикстура для создания фильма
+    """
     response = auth_admin.movies_api.create_movie(test_movie, expected_status=201)
     movie_id = response.json()["id"]
-    # assert  response.json().get("accessToken") is not None
 
     # Проверяем, что фильм существует
-    get_response = auth_admin.movies_api.get_movie(movie_id, expected_status=200)
+    get_response = auth_admin.movies_api.get_single_movie(movie_id, expected_status=200)
     assert get_response.status_code == 200
 
     return movie_id
-
-    # Cleanup
-    # auth_admin.movies_api.delete_movie(movie_id, expected_status=200)

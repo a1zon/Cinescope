@@ -25,7 +25,7 @@ class MoviesApi(CustomRequester):
             expected_status=expected_status
         )
 
-    def get_movie(self, movie_id, expected_status=200) -> requests.Response:
+    def get_single_movie(self, movie_id, expected_status=200) -> requests.Response:
         endpoint = f"{MOVIES_ENDPOINT}/{movie_id}"
         return self.send_request(
             method="GET",

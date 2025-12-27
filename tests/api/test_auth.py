@@ -4,7 +4,9 @@ from api.api_manager import ApiManager
 class TestAuthAPI:
 
     def test_register_user(self, api_manager: ApiManager, test_user):
-
+        """
+        Тест на регистрацию пользователя
+        """
         response =  api_manager.auth_api.register_user(test_user)
         response_data = response.json()
 
@@ -21,9 +23,8 @@ class TestAuthAPI:
             "email": registered_user["email"],
             "password": registered_user["password"]
         }
-        response = api_manager.auth_api.login_user(login_data)
+        response = api_manager.auth_api.login_user(login_data,expected_status=201)
         response_data = response.json()
 
-        # Проверки
         assert "accessToken" in response_data, "Токен доступа отсутствует в ответе"
         assert response_data["user"]["email"] == registered_user["email"], "Email не совпадает"
