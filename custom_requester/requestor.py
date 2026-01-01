@@ -1,8 +1,9 @@
 import json
-import requests
 import logging
 import os
 from typing import Optional, Dict, Any
+
+import requests
 
 
 class CustomRequester:
@@ -22,16 +23,16 @@ class CustomRequester:
         self.logger.setLevel(logging.INFO)
 
     def send_request(
-        self,
-        method: str,
-        endpoint: str,
-        data: Optional[Dict] = None,
-        params: Optional[Dict] = None,
-        headers: Optional[Dict] = None,
-        files: Optional[Dict] = None,
-        expected_status: int = 200,
-        need_logging: bool = True,
-        **kwargs: Any,
+            self,
+            method: str,
+            endpoint: str,
+            data: Optional[Dict] = None,
+            params: Optional[Dict] = None,
+            headers: Optional[Dict] = None,
+            files: Optional[Dict] = None,
+            expected_status: int = 200,
+            need_logging: bool = True,
+            **kwargs: Any,
     ) -> requests.Response:
         """
         Универсальный метод отправки запроса.

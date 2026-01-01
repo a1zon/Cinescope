@@ -1,25 +1,27 @@
 import requests
-from constants import  REGISTER_ENDPOINT, LOGIN_ENDPOINT
-from  custom_requester.requestor import  CustomRequester
+
 from constants import BASE_URL
+from constants import REGISTER_ENDPOINT, LOGIN_ENDPOINT
+from custom_requester.requestor import CustomRequester
+
 
 class AuthApi(CustomRequester):
     """
     класс для работы с аунтефикацией
     """
-    
-    def __init__(self,session):
+
+    def __init__(self, session):
         super().__init__(session=session, base_url=BASE_URL)
 
     @staticmethod
-    def get_user_token( response: requests.Response):
+    def get_user_token(response: requests.Response):
         data = response.json()
         if "accessToken" not in data:
             raise KeyError("token is missing")
         token = data["accessToken"]
         return token
 
-    def register_user(self,user_data,expected_status = 201) -> requests.Response:
+    def register_user(self, user_data, expected_status=201) -> requests.Response:
         """
         Регистрация нового пользователя.
         :param user_data: Данные пользователя.
@@ -31,7 +33,6 @@ class AuthApi(CustomRequester):
             data=user_data,
             expected_status=expected_status
         )
-
 
     def login_user(self, login_data, expected_status=201) -> requests.Response:
         """
@@ -46,7 +47,6 @@ class AuthApi(CustomRequester):
             expected_status=expected_status
         )
 
-
     def authenticate(self, user) -> None:
         """
         Логин обчного юзера
@@ -59,7 +59,6 @@ class AuthApi(CustomRequester):
         response = self.login_user(login_data)
 
         token = self.get_user_token(response)
-
 
         self._update_session_headers(**{"authorization": "Bearer " + token})
 
@@ -77,4 +76,3 @@ class AuthApi(CustomRequester):
         token = self.get_user_token(response)
 
         self._update_session_headers(**{"authorization": "Bearer " + token})
-

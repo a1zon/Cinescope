@@ -1,14 +1,15 @@
-from  custom_requester.requestor import  CustomRequester
+import requests
+
 from constants import *
-import  requests
+from custom_requester.requestor import CustomRequester
+
 
 class MoviesApi(CustomRequester):
 
-    def __init__(self,session):
+    def __init__(self, session):
         super().__init__(session=session, base_url=API_BASE_URL)
 
-    def create_movie (self, movie_data,expected_status = 200) -> requests.Response:
-
+    def create_movie(self, movie_data, expected_status=200) -> requests.Response:
         return self.send_request(
             method="POST",
             endpoint=MOVIES_ENDPOINT,
