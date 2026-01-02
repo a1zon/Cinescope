@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
 
-from db_models.movies import FilmDBModel
-from db_models.user import UserDBModel
-
+from models.db_models.movies import FilmDBModel
+from models.db_models.user import UserDBModel
 
 class DBHelper:
     def __init__(self, db_session: Session):

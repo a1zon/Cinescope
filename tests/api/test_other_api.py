@@ -1,7 +1,7 @@
 import pytest
 from requests import Session
 
-from db_models.accounts_transaction_model import AccountTransactionTemplate
+from models.db_models.accounts_transaction_model import AccountTransactionTemplate
 from utils.data_generator import DataGenerator
 
 

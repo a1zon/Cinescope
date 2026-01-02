@@ -1,5 +1,5 @@
 from conftest import db_helper
-from db_models.movies import FilmDBModel
+from models.db_models.movies import FilmDBModel
 
 
 def test_create_movie_db(super_admin, db_helper, created_movie):

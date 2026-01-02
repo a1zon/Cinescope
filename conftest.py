@@ -6,7 +6,7 @@ from custom_requester.requestor import CustomRequester
 from api.api_manager import ApiManager
 from resources.user_creds import SuperAdminCreds,AdminCreds
 from entities.user import User
-from test_pydantic import  TestUser, RegisterUserRequest
+from models.pydantic_models import  TestUser, RegisterUserRequest
 from sqlalchemy.orm import Session
 from db_requester.bd_client import get_db_session
 from typing import Generator

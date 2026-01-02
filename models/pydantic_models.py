@@ -62,3 +62,25 @@ class CreateUserRequest(RegisterUserRequest):
     verified: bool
     banned: bool
 
+
+class WorldClockResponse(BaseModel):
+    id: str = Field(alias="$id")  # Используем алиас для поля "$id"
+    currentDateTime: str
+    utcOffset: str
+    isDayLightSavingsTime: bool
+    dayOfTheWeek: str
+    timeZoneName: str
+    currentFileTime: int
+    ordinalDate: str
+    serviceResponse: None
+
+    class Config:
+        # Разрешаем использование алиасов при парсинге JSON
+        allow_population_by_field_name = True
+
+class DateTimeRequest(BaseModel):
+    currentDateTime: str
+
+class WhatIsTodayResponse(BaseModel):
+    message: str
+
