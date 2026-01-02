@@ -64,7 +64,7 @@ def created_test_user(db_helper):
 #     }
 
 @pytest.fixture
-def test_user() -> dict:
+def create_test_user() -> dict:
     random_password = DataGenerator.generate_random_password()
 
     user = TestUser(
@@ -93,7 +93,7 @@ def test_user_auth() -> dict:
 
 
 @pytest.fixture(scope="function")
-def test_movie():
+def create_test_movie():
     """
     Фикстура для создания тестового фильма
     """
@@ -155,11 +155,11 @@ def api_manager(session):
     return ApiManager(session)
 
 @pytest.fixture(scope="function")
-def auth_user(api_manager,test_user):
+def auth_user(api_manager, create_test_user):
     """
     Фикстура для авторизации обыным юзером
     """
-    api_manager.auth_api.authenticate(test_user)
+    api_manager.auth_api.authenticate(create_test_user)
     return api_manager
 
 @pytest.fixture(scope = "session")
@@ -172,11 +172,11 @@ def auth_admin(api_manager):
 
 
 @pytest.fixture(scope="function")
-def created_movie(auth_admin, test_movie):
+def created_movie(auth_admin, create_test_movie):
     """
     Фикстура для создания фильма
     """
-    response = auth_admin.movies_api.create_movie(test_movie, expected_status=201)
+    response = auth_admin.movies_api.create_movie(create_test_movie, expected_status=201)
     movie_id = response.json()["id"]
 
     # Проверяем, что фильм существует
@@ -215,8 +215,8 @@ def super_admin(user_session):
     return super_admin
 
 @pytest.fixture(scope="function")
-def creation_user_data(test_user):
-    updated_data = test_user.copy()
+def creation_user_data(create_test_user):
+    updated_data = create_test_user.copy()
     updated_data.update({
         "verified": True,
         "banned": False

@@ -6,17 +6,17 @@ from constants import MIN_PARAMS, UPDATE_DATA
 
 class TestMoviesEndpoint:
 
-    def test_create_movie(self, super_admin, creation_user_data, test_movie):
+    def test_create_movie(self, super_admin, creation_user_data, create_test_movie):
         """
         Тест на создание фильма
         """
-        response = super_admin.api.movies_api.create_movie(movie_data=test_movie, expected_status=201)
+        response = super_admin.api.movies_api.create_movie(movie_data=create_test_movie, expected_status=201)
         data = response.json()
 
         assert response.status_code == 201
         assert "id" in data
-        assert data["name"] == test_movie["name"]
-        assert data["price"] == test_movie["price"]
+        assert data["name"] == create_test_movie["name"]
+        assert data["price"] == create_test_movie["price"]
         assert data["published"] is True
 
     @pytest.mark.slow

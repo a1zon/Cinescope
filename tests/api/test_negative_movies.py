@@ -3,7 +3,7 @@ import pytest
 
 class TestMoviesNegative:
 
-    def test_create_movie_duplicate_name(self, super_admin, created_movie, test_movie, db_helper):
+    def test_create_movie_duplicate_name(self, super_admin, created_movie, create_test_movie, db_helper):
         """
         Негативный тест: попытка создать фильм с уже существующим названием
         Использует super_admin для создания дубликата
@@ -12,7 +12,7 @@ class TestMoviesNegative:
         movie_in_db = db_helper.get_movie_by_id(created_movie)
         assert movie_in_db is not None, "Фильм должен существовать в БД перед тестом дубликата"
 
-        duplicate_response = super_admin.api.movies_api.create_movie(test_movie, expected_status=409)
+        duplicate_response = super_admin.api.movies_api.create_movie(create_test_movie, expected_status=409)
         assert duplicate_response.status_code == 409
 
     def test_get_nonexistent_movie(self, super_admin):
@@ -29,11 +29,11 @@ class TestMoviesNegative:
         response = super_admin.api.movies_api.delete_movie(999999, expected_status=404)
         assert response.status_code == 404
 
-    def test_common_user_create_movie(self, common_user, test_movie):
+    def test_common_user_create_movie(self, common_user, create_test_movie):
         """
         Негативный тест: обычный пользователь не может создать фильм
         """
-        response = common_user.api.movies_api.create_movie(test_movie, expected_status=403)
+        response = common_user.api.movies_api.create_movie(create_test_movie, expected_status=403)
         assert response.status_code == 403
 
     @pytest.mark.slow

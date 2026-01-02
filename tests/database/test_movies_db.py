@@ -17,26 +17,26 @@ def test_create_movie_db(super_admin, db_helper, created_movie):
     assert data["id"] == db_data.id
 
 
-def test_movie_lifecycle(super_admin, db_helper, test_movie):
+def test_movie_lifecycle(super_admin, db_helper, create_test_movie):
     """
     ЖЦ фильма )
     """
 
     # В БД ищем фильм по имени
     movie_in_db_before = db_helper.db_session.query(FilmDBModel) \
-        .filter(FilmDBModel.name == test_movie["name"]) \
+        .filter(FilmDBModel.name == create_test_movie["name"]) \
         .first()
     assert movie_in_db_before is None, "Фильм уже существует в БД до теста"
 
     # создание фильма через API
-    create_response = super_admin.api.movies_api.create_movie(test_movie, expected_status=201)
+    create_response = super_admin.api.movies_api.create_movie(create_test_movie, expected_status=201)
     created_movie_id = create_response.json()["id"]
 
     # Проверяем, что фильм появился в БД
     movie_in_db_after_create = db_helper.get_movie_by_id(created_movie_id)
     assert movie_in_db_after_create is not None, "Фильм не найден в БД после создания"
-    assert movie_in_db_after_create.name == test_movie["name"]
-    assert movie_in_db_after_create.price == test_movie["price"]
+    assert movie_in_db_after_create.name == create_test_movie["name"]
+    assert movie_in_db_after_create.price == create_test_movie["price"]
 
     # удаление фильма через API
     delete_response = super_admin.api.movies_api.delete_movie(movie_id=created_movie_id, expected_status=200)
