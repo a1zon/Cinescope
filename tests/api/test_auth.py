@@ -1,5 +1,4 @@
 import pytest
-
 from api.api_manager import ApiManager
 
 
