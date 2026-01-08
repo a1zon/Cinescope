@@ -1,5 +1,6 @@
-from custom_requester.requestor import CustomRequester
 from constants import *
+from custom_requester.requestor import CustomRequester
+
 
 class UserAPI(CustomRequester):
     """
@@ -7,8 +8,7 @@ class UserAPI(CustomRequester):
     """
 
     def __init__(self, session):
-       super().__init__(session=session, base_url=BASE_URL)
-
+        super().__init__(session=session, base_url=BASE_URL)
 
     def get_user_info(self, user_id, expected_status=200):
         """
@@ -27,5 +27,13 @@ class UserAPI(CustomRequester):
         return self.send_request(
             method="DELETE",
             endpoint=f"/user/{user_id}",
+            expected_status=expected_status
+        )
+
+    def create_user(self, user_data, expected_status=201):
+        return self.send_request(
+            method="POST",
+            endpoint="/user",
+            data=user_data,
             expected_status=expected_status
         )

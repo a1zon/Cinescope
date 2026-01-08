@@ -2,6 +2,7 @@ import  random
 import  string
 from faker import Faker
 from uuid import uuid4
+import datetime
 
 faker = Faker()
 
@@ -33,9 +34,30 @@ class DataGenerator:
         return ''.join(password)
 
     @staticmethod
-    def generate_random_movie():
-        random_movie = faker.catch_phrase(),
-        return str(random_movie)
+    def generate_random_movie_name():
+        """
+        Генерирует более «кинематографичное» название фильма.
+        Использует комбинацию слов, catch_phrase и эпитетов - зачем я так запарился хз
+        """
+
+
+        main_title = faker.catch_phrase()
+
+
+        prefixes = ["The Last", "Shadows of", "Rise of", "Return of", "Chronicles of", "Whispers in"]
+        prefix = random.choice(prefixes) if random.random() < 0.6 else ""
+
+
+        suffixes = [": A Tale", ": The Final Chapter", ": Reborn", ": Origins", ": Awakening"]
+        suffix = random.choice(suffixes) if random.random() < 0.5 else ""
+
+
+        title = f"{prefix} {main_title}{suffix}".strip()
+
+        title = " ".join(title.split())
+
+        return title
+
 
     @staticmethod
     def generate_random_int():
@@ -43,6 +65,29 @@ class DataGenerator:
         return random_int
 
     @staticmethod
+    def generate_random_int_variable(char: int):
+        random_int = random.randint(1, char)
+        return random_int
+
+
+    @staticmethod
     def generate_random_sentence():
         random_sentence = faker.sentence(nb_words=6)
         return  random_sentence
+
+    @staticmethod
+    def generate_user_data() -> dict:
+        """Генерирует данные для тестового пользователя"""
+        from uuid import uuid4
+
+        return {
+            'id': f'{uuid4()}',  # генерируем UUID как строку
+            'email': DataGenerator.generate_random_email(),
+            'full_name': DataGenerator.generate_random_name(),
+            'password': DataGenerator.generate_random_password(),
+            'created_at': datetime.datetime.now(),
+            'updated_at': datetime.datetime.now(),
+            'verified': False,
+            'banned': False,
+            'roles': '{USER}'
+        }
