@@ -26,6 +26,22 @@ Cinescope — это демонстрационный проект, показы
 - SQLAlchemy / psycopg2 (для БД checks)
 - Allure-pytest
 
+## API Specification (Swagger / OpenAPI)
+
+Тесты написаны на основе реальной спецификации API кино-сервиса Cinescope.
+
+- **Прямая ссылка на Swagger UI** (интерактивная документация с возможностью отправлять запросы):  
+  👉 [Открыть Swagger UI](https://api.dev-cinescope.coconutqa.ru/swagger#/)
+
+- **Альтернативные просмотрщики** (если основной недоступен или хочешь другой вид):  
+  - [В Swagger Editor](https://editor.swagger.io/?url=https://api.dev-cinescope.coconutqa.ru/swagger.json) — редактор + Try it out  
+  - [В RapiDoc](https://mrin9.github.io/RapiDoc/api.html?url=https://api.dev-cinescope.coconutqa.ru/swagger.json) — современный и красивый интерфейс  
+  - [В Redoc](https://redocly.github.io/redoc/?url=https://api.dev-cinescope.coconutqa.ru/swagger.json) — чистый, читаемый single-page вид  
+
+**Примечание**: Swagger UI загружается напрямую с дев-сервера. Если сервер временно недоступен, используй альтернативы — они подгружают спецификацию по URL https://api.dev-cinescope.coconutqa.ru/swagger.json (стандартный эндпоинт для JSON-спецификации).
+
+Это позволяет любому просмотреть все эндпоинты, схемы запросов/ответов и даже протестировать API без установки чего-либо.
+
 ## Установка и запуск
 ```bash
 git clone https://github.com/a1zon/Cinescope.git
