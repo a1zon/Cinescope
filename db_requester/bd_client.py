@@ -11,7 +11,9 @@ DATABASE_NAME = DBCreds.DBNAME
 
 engine = create_engine(
     f"postgresql+psycopg2://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE_NAME}",
-    echo=False  # Установить True для отладки SQL запросов
+    echo=False,  # Установить True для отладки SQL запросов
+    pool_pre_ping=True,  # Проверяем соединение перед использованием
+    pool_recycle=300,  # Пересоздаём соединения каждые 5 минут
 )
 
 #  создаем фабрику сессий

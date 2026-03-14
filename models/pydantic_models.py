@@ -1,34 +1,40 @@
-from typing import Optional
 import datetime
-from typing import List
-from pydantic import BaseModel, Field, field_validator
-from constants import  Roles
+from typing import Optional, List
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+from constants import Roles
+
 
 class TestUser(BaseModel):
+    """Модель тестового пользователя для создания через SUPER_ADMIN."""
+    model_config = ConfigDict(use_enum_values=True)
+
     email: str
     fullName: str
     password: str
-    passwordRepeat: str = Field(..., min_length=1, max_length=20, description="passwordRepeat должен полностью совпадать с полем password")
+    passwordRepeat: str = Field(
+        ..., min_length=1, max_length=20,
+        description="Должен совпадать с полем password"
+    )
     roles: list[Roles] = [Roles.USER]
     verified: Optional[bool] = None
     banned: Optional[bool] = None
 
     @field_validator("passwordRepeat")
     def check_password_repeat(cls, value: str, info) -> str:
-        # Проверяем, совпадение паролей
         if "password" in info.data and value != info.data["password"]:
             raise ValueError("Пароли не совпадают")
         return value
 
-    # Добавляем кастомный JSON-сериализатор для Enum
-    class Config:
-        json_encoders = {
-            Roles: lambda v: v.value  # Преобразуем Enum в строку
-        }
 
 class RegisterUserResponse(BaseModel):
+    """Модель ответа на регистрацию — валидирует структуру JSON от сервера."""
     id: str
-    email: str = Field(pattern=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", description="Email пользователя")
+    email: str = Field(
+        pattern=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
+        description="Email пользователя"
+    )
     fullName: str = Field(min_length=1, max_length=100, description="Полное имя пользователя")
     verified: bool
     banned: bool
@@ -37,14 +43,15 @@ class RegisterUserResponse(BaseModel):
 
     @field_validator("createdAt")
     def validate_created_at(cls, value: str) -> str:
-        # Валидатор для проверки формата даты и времени (ISO 8601).
         try:
             datetime.datetime.fromisoformat(value)
         except ValueError:
-            raise ValueError("Некорректный формат даты и времени. Ожидается формат ISO 8601.")
+            raise ValueError("Некорректный формат даты. Ожидается ISO 8601.")
         return value
 
+
 class RegisterUserRequest(BaseModel):
+    """Модель запроса на регистрацию пользователя."""
     email: str
     fullName: str
     password: str
@@ -58,29 +65,35 @@ class RegisterUserRequest(BaseModel):
 
 
 class CreateUserRequest(RegisterUserRequest):
+    """Расширенный запрос для создания пользователя с указанием ролей и статуса."""
     roles: list[Roles]
     verified: bool
     banned: bool
 
 
-class WorldClockResponse(BaseModel):
-    id: str = Field(alias="$id")  # Используем алиас для поля "$id"
-    currentDateTime: str
-    utcOffset: str
-    isDayLightSavingsTime: bool
-    dayOfTheWeek: str
-    timeZoneName: str
-    currentFileTime: int
-    ordinalDate: str
-    serviceResponse: None
+class MovieResponse(BaseModel):
+    """Модель ответа при получении фильма из API."""
+    id: int
+    name: str
+    price: float
+    description: Optional[str] = None
+    imageUrl: Optional[str] = None
+    location: str
+    published: bool
+    rating: float
+    genreId: int
+    createdAt: str
 
-    class Config:
-        # Разрешаем использование алиасов при парсинге JSON
-        allow_population_by_field_name = True
 
-class DateTimeRequest(BaseModel):
-    currentDateTime: str
+class GenreResponse(BaseModel):
+    """Модель жанра из API."""
+    id: int
+    name: str
 
-class WhatIsTodayResponse(BaseModel):
-    message: str
 
+class ReviewResponse(BaseModel):
+    """Модель отзыва из API."""
+    userId: str
+    text: str
+    rating: int
+    createdAt: str

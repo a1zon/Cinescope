@@ -45,24 +45,6 @@ def created_test_user(db_helper):
     if db_helper.get_user_by_id(user.id):
         db_helper.delete_user(user)
 
-# пусть полежит - вдруг все обратно поломаю
-# @pytest.fixture(scope = "function")
-# def test_user():
-#     """
-#     Фикстура для создания тестового юзера
-#     """
-#     random_email = DataGenerator.generate_random_email()
-#     random_name = DataGenerator.generate_random_name()
-#     random_password = DataGenerator.generate_random_password()
-#
-#     return {
-#         "email": random_email,
-#         "fullName": random_name,
-#         "password": random_password,
-#         "passwordRepeat": random_password,
-#         "roles": ["USER"]
-#     }
-
 @pytest.fixture
 def create_test_user() -> dict:
     random_password = DataGenerator.generate_random_password()

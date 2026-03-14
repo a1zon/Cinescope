@@ -1,6 +1,5 @@
 import pytest
-import  allure
-from conftest import created_movie, super_admin, common_user
+import allure
 from constants import MIN_PARAMS, UPDATE_DATA
 
 

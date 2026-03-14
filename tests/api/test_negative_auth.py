@@ -1,9 +1,15 @@
+import allure
 from api.api_manager import ApiManager
 from constants import WRONG_PASSWORD, BAD_EMAIL
 
 
+@allure.epic("Auth API")
+@allure.feature("Негативные сценарии авторизации")
 class TestNegativeApi:
 
+    @allure.story("Неверные данные")
+    @allure.title("Логин с неправильным паролем")
+    @allure.severity(allure.severity_level.NORMAL)
     def test_bad_password(self, api_manager: ApiManager, create_test_user):
         """
         Попытка логина с неправильным паролем.
@@ -14,12 +20,17 @@ class TestNegativeApi:
             "password": WRONG_PASSWORD
         }
 
-        response = api_manager.auth_api.login_user(data, expected_status=401)
-        assert response.status_code == 401, "Статус должен быть 401 при неправильном пароле"
+        with allure.step("Отправляем запрос с неправильным паролем"):
+            response = api_manager.auth_api.login_user(data, expected_status=401)
 
-        message = response.json().get("message")
-        assert message == "Неверный логин или пароль", f"Неправильное сообщение ошибки: {message}"
+        with allure.step("Проверяем статус и сообщение об ошибке"):
+            assert response.status_code == 401, "Статус должен быть 401 при неправильном пароле"
+            message = response.json().get("message")
+            assert message == "Неверный логин или пароль", f"Неправильное сообщение ошибки: {message}"
 
+    @allure.story("Неверные данные")
+    @allure.title("Логин с неправильным email")
+    @allure.severity(allure.severity_level.NORMAL)
     def test_bad_email(self, api_manager: ApiManager, create_test_user):
         """
         Попытка логина с неправильным email.
@@ -30,12 +41,17 @@ class TestNegativeApi:
             "password": create_test_user["password"]
         }
 
-        response = api_manager.auth_api.login_user(data, expected_status=401)
-        assert response.status_code == 401, "Статус должен быть 401 при неправильном email"
+        with allure.step("Отправляем запрос с неправильным email"):
+            response = api_manager.auth_api.login_user(data, expected_status=401)
 
-        message = response.json().get("message")
-        assert message == "Неверный логин или пароль", f"Неправильное сообщение ошибки: {message}"
+        with allure.step("Проверяем статус и сообщение об ошибке"):
+            assert response.status_code == 401, "Статус должен быть 401 при неправильном email"
+            message = response.json().get("message")
+            assert message == "Неверный логин или пароль", f"Неправильное сообщение ошибки: {message}"
 
+    @allure.story("Неверные данные")
+    @allure.title("Логин с пустым JSON")
+    @allure.severity(allure.severity_level.NORMAL)
     def test_empty_json(self, api_manager: ApiManager):
         """
         Попытка логина с пустым JSON.
@@ -43,8 +59,10 @@ class TestNegativeApi:
         """
         data = {}
 
-        response = api_manager.auth_api.login_user(data, expected_status=401)
-        assert response.status_code == 401, "Статус должен быть 401 при пустом JSON"
+        with allure.step("Отправляем пустой JSON"):
+            response = api_manager.auth_api.login_user(data, expected_status=401)
 
-        message = response.json().get("message")
-        assert message == "Неверный логин или пароль", f"Неправильное сообщение ошибки: {message}"
+        with allure.step("Проверяем статус и сообщение об ошибке"):
+            assert response.status_code == 401, "Статус должен быть 401 при пустом JSON"
+            message = response.json().get("message")
+            assert message == "Неверный логин или пароль", f"Неправильное сообщение ошибки: {message}"
